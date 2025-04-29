@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 import Webcam from "react-webcam";
 
 const Densityx = () => {
+
+
+  // State to store the uploaded image
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [isDragging, setIsDragging] = useState(false); 
+  const [facingMode, setFacingMode] = useState("user");
+
   const videoConstraints = {
     facingMode: "user"
   };
 
-  // State to store the uploaded image
-  const [uploadedImage, setUploadedImage] = useState(null);
-  const [isDragging, setIsDragging] = useState(false); // For drag-and-drop styling
+  const toggleCamera = () => {
+    setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
+  };
 
   // Handle image upload (via input or drag-and-drop)
   const handleImageUpload = (file) => {
@@ -76,11 +83,18 @@ const Densityx = () => {
         {/* Webcam Section */}
         <div className='w-full md:w-1/2'>
           <Webcam
+            key={facingMode}
             audio={false}
             screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
+            videoConstraints={{ facingMode }}
             className='w-full rounded-xl shadow-lg border-2 border-gray-700'
           />
+          <button
+            onClick={toggleCamera}
+            className="mt-4 text-white font-medium bg-gradient-to-r from-green-600 to-green-500 px-6 py-3 rounded-xl hover:from-green-700 hover:to-green-600 transition shadow-md"
+          >
+            Switch to {facingMode === "user" ? "Back" : "Front"} Camera
+          </button>
         </div>
 
         {/* Image Upload Section */}
